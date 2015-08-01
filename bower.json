@@ -14,6 +14,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.4.3"
+    "angular": "~1.4.3",
+    "asana": "~0.9.1"
   }
 }
