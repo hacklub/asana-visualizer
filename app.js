@@ -1,6 +1,8 @@
 var app = angular.module('Motivatr', []);
 
-app.controller('vizCtrl', ['$scope', function vizCtrl($scope){
+app.controller('vizCtrl', vizCtrl);
+
+function vizCtrl(){
   console.log('hey');
-  $scope.something = 'Hello World';
-}]);
+  this.something = 'Hello World';
+};
