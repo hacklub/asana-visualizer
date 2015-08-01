@@ -1,8 +1,11 @@
 app.factory('asanaService', function ($http) {
 
+  // get token from cookie
+  var token = document.cookie.split('token=')[1].split(';')[0]
   var TASKLIST = []
 
-  var client = Asana.Client.create().useBasicAuth('clZ0GOqQ.BoV0Fu6rGVLVsvF2B6pkcR4');
+  var client = Asana.Client.create()
+  client.useOauth({ credentials: token })
 
   (function getTasks () {
   
