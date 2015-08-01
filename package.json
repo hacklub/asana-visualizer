@@ -1,0 +1,23 @@
+{
+  "name": "motivatr",
+  "version": "1.0.0",
+  "description": "Tells you when to do what based on when you’re most productive",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mLuby/motivatr.git"
+  },
+  "author": "Mike Luby <Michael@mLuby.com> (https://github.com/mLuby)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mLuby/motivatr/issues"
+  },
+  "homepage": "https://github.com/mLuby/motivatr",
+  "dependencies": {
+    "asana": "^0.9.1",
+    "lodash": "^3.10.0"
+  }
+}
