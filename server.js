@@ -1,5 +1,6 @@
 var path = require('path');
 var port = process.env.PORT || 8080;
+var host; // filled in on first incoming request
 var Asana = require('asana');
 var express = require('express');
 var cookieParser = require('cookie-parser');
@@ -16,12 +17,21 @@ function createClient() {
   return Asana.Client.create({
     clientId: asanaClientId,
     clientSecret: asanaClientSecret,
-    redirectUri: 'http://localhost:' + port + '/oauth_callback'
+    redirectUri: 'https://' + host + ':' + port + '/oauth_callback'
   });
 }
 
 // Causes request cookies to be parsed, populating `req.cookies`.
 app.use(cookieParser());
+
+// Fill in host on first incoming request
+app.use('/', function(req, res, next){
+  if(!host){
+    host = req.headers.host.split(':')[0];
+    console.log('host', typeof host, host);
+  }
+  next();
+})
 
 // Client Resources
 app.use('/client/node_modules', express.static(__dirname + '/node_modules'));
