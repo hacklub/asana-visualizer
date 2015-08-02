@@ -6,11 +6,7 @@ vizCtrl.$inject = ['$scope', 'asanaService', 'timeService'];
 function vizCtrl($scope, asanaService, timeService){
   this.chartData = asanaService.tasks;
   context = this.chartData
-  $scope.$watch('asanaService.tasks', function (newData) {
-    console.log("newData: ", newData);
-  })
-
-  // this.chartData = groupDatesByHour();
+  this.data = asanaService;
 
   function randomHour () {
     return Math.floor(Math.random()*24);
