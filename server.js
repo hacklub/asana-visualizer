@@ -24,10 +24,25 @@ function createClient() {
 
 // Causes request cookies to be parsed, populating `req.cookies`.
 app.use(cookieParser());
+
+// Client Resources
 app.use('/client/node_modules', express.static(__dirname + '/node_modules'));
 app.use('/client', express.static(__dirname + '/client'));
 
-app.get('/', function(req, res) {
+// Splash Page Resources
+app.use('/splash/node_modules', express.static(__dirname + '/node_modules'));
+app.use('/splash', express.static(__dirname + '/splash'));
+
+/**
+* Routes
+*/
+
+app.get('/', function (request, response) {
+  response.sendFile(path.join(__dirname, 'splash/index.html'));
+});
+
+
+app.get('/app', function(req, res) {
   var client = createClient();
   // If token is in the cookie, use it to show info.
   var token = req.cookies.token;
