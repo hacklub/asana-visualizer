@@ -68,7 +68,7 @@ app.get('/oauth_callback', function(req, res) {
       // to prevent it from being stolen.
       res.cookie('token', credentials.access_token, { maxAge: 60 * 60 * 1000 });
       // Redirect back home, where we should now have access to Asana data.
-      res.redirect('/');
+      res.redirect('/app');
     });
   } else {
     // Authorization could have failed. Show an error.
