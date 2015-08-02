@@ -5,19 +5,17 @@ var express = require('express');
 var cookieParser = require('cookie-parser');
 var app = express();
 
-// Middleware
-// var bodyParser = require('body-parser');
-// app.use(bodyParser.json());
+var asanaClientId = process.env.asanaClientId;
+var asanaClientSecret = process.env.asanaClientSecret;
 
-var clientId = '43511055636261';
-var clientSecret = 'f081b14c10d5d1ed524bf7618d870993';
+console.log('asanaClientId', typeof asanaClientId, asanaClientId, 'asanaClientSecret', typeof asanaClientSecret, asanaClientSecret);
 
 // Create an Asana client. Do this per request since it keeps state that
 // shouldn't be shared across requests.
 function createClient() {
   return Asana.Client.create({
-    clientId: clientId,
-    clientSecret: clientSecret,
+    clientId: asanaClientId,
+    clientSecret: asanaClientSecret,
     redirectUri: 'http://localhost:' + port + '/oauth_callback'
   });
 }
@@ -33,9 +31,9 @@ app.use('/client', express.static(__dirname + '/client'));
 app.use('/splash/node_modules', express.static(__dirname + '/node_modules'));
 app.use('/splash', express.static(__dirname + '/splash'));
 
-/**
-* Routes
-*/
+////////////
+// Routes //
+////////////
 
 app.get('/', function (request, response) {
   response.sendFile(path.join(__dirname, 'splash/index.html'));
@@ -82,24 +80,3 @@ app.get('/oauth_callback', function(req, res) {
 app.listen(port, function() {
   console.log("Listening on port " + port);
 });
-
-// =======================================================
-// VISUALIZER BLOCK
-// =======================================================
-
-// /* Visualizer */
-// var bodyParser = require('body-parser');
-// app.use(bodyParser.json());
-// app.post('/graph/data', function(req, res){
-//   console.log(req.body);
-//   return res.sendStatus(200);
-// });
-// app.get('/graph/data', function(req, res) {
-//   console.log('replying with current topology');
-//   res.send('hi');
-// });
-// app.get('/graph/viz', function(req, res) {
-//   res.sendFile(path.join(__dirname,'../client/visualizer.html'));
-// });
-
-// app.use('/', express.static(path.join(__dirname,'/client')));
