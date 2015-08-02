@@ -17,80 +17,46 @@ function vizCtrl($scope, asanaService, timeService){
   }
 };
 
-app.directive('dayChart', dayChart)
-function dayChart(){
+app.directive('nvChart', nvChart)
+function nvChart(){
   return {
     restrict:'A'
     ,scope:{ data:'@' }
     ,template:'<div id="chart"><svg></svg></div><div class="data">{{data}}</div>'
-    ,link:createChart
+    ,link:link
   }
-  function createChart(){
-    console.log('discreteBarChart', typeof nv.models.discreteBarChart);
-    console.log('staggerLabels', typeof nv.models.discreteBarChart().staggerLabels);
-    console.log('tooltips', typeof nv.models.discreteBarChart().tooltips);
-    console.log('showValues', typeof nv.models.discreteBarChart().showValues);
-    console.log('transitionDuration', typeof nv.models.discreteBarChart().transitionDuration);
 
-    nv.addGraph(function() {
-      var chart = nv.models.discreteBarChart()
-          .x(function(d) { return d.label })    //Specify the data accessors.
-          .y(function(d) { return d.value })
-          .staggerLabels(true)    //Too many bars and not enough room? Try staggering labels.
-          .tooltips(false)        //Don't show tooltips
-          .showValues(true)       //...instead, show the bar value right on top of each bar.
-          // .transitionDuration(350);
+  function link(scope){
+    var chart = nv.models
+                  .discreteBarChart()
+                  .x(function(d) { return d.label })    //Specify the data accessors.
+                  .y(function(d) { return d.value })
+                  .staggerLabels(true)    //Too many bars and not enough room? Try staggering labels.
+                  .tooltips(false)        //Don't show tooltips
+                  .showValues(true)       //...instead, show the bar value right on top of each bar.
+    nv.addGraph(loadChart);
 
+    function loadChart() {
       d3.select('#chart svg')
-          .datum(exampleData())
+          .datum(chartData())
+        // .transition().duration(500)
           .call(chart);
-
       nv.utils.windowResize(chart.update);
-
       return chart;
-    });
+    };
+
+    setInterval(function(){
+      console.log('update chart', nvChart);
+      loadChart();
+    }, 1000);
+
+    function chartData(){
+      return JSON.parse(scope.data);
+    }
 
     //Each bar represents a single discrete quantity.
     function exampleData() {
-     return  [
-        {
-          key: "Cumulative Return",
-          values: [
-            {
-              "label" : "A Label" ,
-              "value" : -29.765957771107
-            } ,
-            {
-              "label" : "B Label" ,
-              "value" : 0
-            } ,
-            {
-              "label" : "C Label" ,
-              "value" : 32.807804682612
-            } ,
-            {
-              "label" : "D Label" ,
-              "value" : 196.45946739256
-            } ,
-            {
-              "label" : "E Label" ,
-              "value" : 0.19434030906893
-            } ,
-            {
-              "label" : "F Label" ,
-              "value" : -98.079782601442
-            } ,
-            {
-              "label" : "G Label" ,
-              "value" : -13.925743130903
-            } ,
-            {
-              "label" : "H Label" ,
-              "value" : -5.1387322875705
-            }
-          ]
-        }
-      ]
+      return [{"key":"Tasks Per Hour","values":[{"label":"midnight","value":5},{"label":"1am","value":0},{"label":"2am","value":0},{"label":"3am","value":0},{"label":"4am","value":0},{"label":"5am","value":0},{"label":"6am","value":0},{"label":"7am","value":0},{"label":"8am","value":0},{"label":"9am","value":0},{"label":"10am","value":0},{"label":"11am","value":0},{"label":"12pm","value":0},{"label":"1pm","value":0},{"label":"2pm","value":0},{"label":"3pm","value":0},{"label":"4pm","value":0},{"label":"5pm","value":0},{"label":"6pm","value":0},{"label":"7pm","value":6},{"label":"8pm","value":0},{"label":"9pm","value":0},{"label":"10pm","value":0},{"label":"11pm","value":0}]}]
     }
   }
 }
