@@ -8,7 +8,6 @@ var app = express();
 
 // Environment/config variables
 var prod = process.env.environment === 'production';
-console.log('prod', prod, 'process.env.environment', typeof process.env.environment, process.env.environment, process.env.environment=='production');
 var asanaClientId = process.env.asanaClientId;
 var asanaClientSecret = process.env.asanaClientSecret;
 
@@ -55,7 +54,6 @@ app.get('/app', function(req, res) {
   var client = createClient();
   // If token is in the cookie, use it to show info.
   var token = req.cookies.token;
-  console.log('req.cookies.token',req.cookies.token, !prod);
   if(!prod) {
     token = 'test_token';
     req.cookies = 'token='+token+';';

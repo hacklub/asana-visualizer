@@ -17,15 +17,13 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
           y: function(d){ return d.value; },
           showValues: true,
           valueFormat: function(d){
-              return d3.format(',.4f')(d);
+              return d3.format(',')(d);
           },
           transitionDuration: 500,
-          xAxis: {
-              axisLabel: 'X Axis'
-          },
           yAxis: {
-              axisLabel: 'Y Axis',
-              axisLabelDistance: 30
+              axisLabel: 'Copmleted tasks',
+              axisLabelDistance: 30,
+              tickFormat: function (d){ return d3.format('d')(d); }
           }
       }
     },
@@ -40,7 +38,7 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
         { "label":"9am", "value":0 },
         { "label":"10am", "value":0 },
         { "label":"11am", "value":0 },
-        { "label":"12pm", "value":0 },
+        { "label":"noon", "value":0 },
         { "label":"1pm", "value":0 },
         { "label":"2pm", "value":0 },
         { "label":"3pm", "value":0 },
