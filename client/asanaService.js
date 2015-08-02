@@ -2,8 +2,37 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
   var self = this;
   this.data = {
     tasks: [],
-    taskCountByHourArr: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    taskCountByHour: [{
+      key: "Tasks Per Hour",
+      values: [
+        { "label":"midnight", "value":0 },
+        { "label":"1am", "value":0 },
+        { "label":"2am", "value":0 },
+        { "label":"3am", "value":0 },
+        { "label":"4am", "value":0 },
+        { "label":"5am", "value":0 },
+        { "label":"6am", "value":0 },
+        { "label":"7am", "value":0 },
+        { "label":"8am", "value":0 },
+        { "label":"9am", "value":0 },
+        { "label":"10am", "value":0 },
+        { "label":"11am", "value":0 },
+        { "label":"12pm", "value":0 },
+        { "label":"1pm", "value":0 },
+        { "label":"2pm", "value":0 },
+        { "label":"3pm", "value":0 },
+        { "label":"4pm", "value":0 },
+        { "label":"5pm", "value":0 },
+        { "label":"6pm", "value":0 },
+        { "label":"7pm", "value":0 },
+        { "label":"8pm", "value":0 },
+        { "label":"9pm", "value":0 },
+        { "label":"10pm", "value":0 },
+        { "label":"11pm", "value":0 }
+      ]
+    }]
   };
+
   // get token from cookie
   var token = document.cookie.split('token=')[1].split(';')[0]
   console.log('token:',token);
@@ -11,9 +40,8 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
   function updateTasksAndDigest(taskDetails){
     console.log('adding',taskDetails,'to',self.data.tasks);
     var hour = Number(taskDetails.split('T')[1].split(':')[0]);
-    var count = self.data.taskCountByHourArr[hour] + 1;
-    self.data.taskCountByHourArr[hour] = count;
-    // angular.copy(self.data.taskCountByHourArr, self.data.taskCountByHourArr);
+    var count = self.data.taskCountByHour[0].values[hour].value + 1;
+    self.data.taskCountByHour[0].values[hour].value = count;
     $rootScope.$digest();
   }
 
