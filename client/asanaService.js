@@ -64,7 +64,7 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
 
   function updateTasksAndDigest(taskDetails){
     console.log('adding',taskDetails,'to chart.data');
-    var hour = Number(taskDetails.completed_at.split('T')[1].split(':')[0]);
+    var hour = Number(taskDetails.split('T')[1].split(':')[0]);
     var count = self.chart.data[0].values[hour].value + 1;
     self.chart.data[0].values[hour].value = count;
     $rootScope.$digest();

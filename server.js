@@ -55,7 +55,7 @@ app.get('/app', function(req, res) {
   var client = createClient();
   // If token is in the cookie, use it to show info.
   var token = req.cookies.token;
-  console.log('req.cookies.token', req.cookies.token, !prod);
+  console.log('req.cookies.token',req.cookies.token, !prod);
   if(!prod) {
     token = 'test_token';
     req.cookies = 'token='+token+';';
