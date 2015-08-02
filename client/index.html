@@ -14,7 +14,8 @@
 </head>
 <body>
   <div id="visualizer" ng-controller="vizCtrl as v">
-    <div day-chart data="{{v.chartData}}"></div>
+    <div day-chart data="{{v.data.taskCountByHourArr}}"></div>
+    tasks: {{v.data.taskCountByHourArr}}
   </div>
 </body>
 </html>

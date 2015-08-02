@@ -5,11 +5,12 @@ var Asana = require('asana');
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var app = express();
+var prod = process.env.NODE_ENV === 'production';
 
 var asanaClientId = process.env.asanaClientId;
 var asanaClientSecret = process.env.asanaClientSecret;
 
-console.log('asanaClientId', typeof asanaClientId, asanaClientId, 'asanaClientSecret', typeof asanaClientSecret, asanaClientSecret);
+prod ? console.log('asanaClientId', typeof asanaClientId, asanaClientId, 'asanaClientSecret', typeof asanaClientSecret, asanaClientSecret) :'';
 
 // Create an Asana client. Do this per request since it keeps state that
 // shouldn't be shared across requests.
@@ -54,6 +55,11 @@ app.get('/app', function(req, res) {
   var client = createClient();
   // If token is in the cookie, use it to show info.
   var token = req.cookies.token;
+  if(!prod) {
+    console.log('env not production');
+    token = 'test_token';
+    req.cookies = 'token='+token+';';
+  }
   if (token) {
     res.cookie(req.cookies);
     res.sendFile(path.join(__dirname,'client/index.html'))
