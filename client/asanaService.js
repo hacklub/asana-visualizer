@@ -68,7 +68,7 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
       var chartIndex = (hour+20)%24 // 4am is the first label
       var count = self.chart.data[0].values[chartIndex].value + 1;
       self.chart.data[0].values[chartIndex].value = count;
-      $rootScope.$digest();
+      $rootScope.$apply();
     }
   }
 
@@ -81,11 +81,18 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
 
   if(token === 'test_token'){
     self.status = 'faking';
-    var allCompletedAt = [{completed_at:"2015-08-02T00:22:37.110Z"}, {completed_at:"2015-08-02T00:22:42.034Z"}, {completed_at:"2015-08-02T00:22:44.530Z"}, {completed_at:"2015-08-02T00:22:46.213Z"}, {completed_at:"2015-08-02T00:22:39.606Z"}, {completed_at:"2015-08-01T19:17:16.223Z"}, {completed_at:"2015-08-01T19:17:17.920Z"}, {completed_at:"2015-08-01T19:17:20.764Z"}, {completed_at:"2015-08-01T19:17:21.681Z"}, {completed_at:"2015-08-01T19:17:23.948Z"}, {completed_at:"2015-08-01T19:17:27.066Z"}];
+    // generate random fake data
+    var allCompletedAt = []
+    while(allCompletedAt.length < 20){
+      allCompletedAt.push({ completed_at:'2015-08-02T'+('0'+Math.floor(Math.random()*24)).slice(-2)+':22:37.110Z' });
+    }
+    // fake stream data into controller
     var interval = setInterval(function(){
       if(allCompletedAt.length > 0){
         convertTaskToChartData(allCompletedAt.pop());
       } else {
+        self.status = 'done';
+        $rootScope.$apply();
         clearInterval(interval);
       }
     }, 500);

@@ -25,7 +25,8 @@
 </head>
 <body>
   <div id="visualizer" ng-controller="vizCtrl as v">
-    <span id="stream-status">{{v.asana.status}}</span>
+    <span id="status">Status: {{v.asana.status}}</span>
+    <span id="most-productive-hour">Most productive hour: {{v.findMostProductiveHour(v.chart.data)}}</span>
     <nvd3 options="v.chart.options" data="v.chart.data" config="{ refreshDataOnly:true }"></nvd3>
   </div>
 </body>
