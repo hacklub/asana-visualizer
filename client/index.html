@@ -5,9 +5,10 @@
   <script src="client/node_modules/angular/angular.js"></script>
   <script src="client/node_modules/asana/dist/asana-min.js"></script>
   <script src="client/node_modules/lodash/index.js"></script>
-  <script src="client/node_modules/chartist/dist/chartist.min.js"></script>
+  <script src="client/node_modules/d3/d3.min.js"></script>
+  <link href="client/node_modules/nvd3/build/nv.d3.min.css" rel="stylesheet">
+  <script src="client/node_modules/nvd3/build/nv.d3.js"></script>
   <script src="client/node_modules/moment/moment.js"></script>
-  <link rel="stylesheet" href="client/node_modules/chartist/dist/chartist.min.css">
   <script src="client/app.js"></script>
   <script src="client/asanaService.js"></script>
   <script src="client/timeService.js"></script>
@@ -15,7 +16,6 @@
 <body>
   <div id="visualizer" ng-controller="vizCtrl as v">
     <div day-chart data="{{v.data.taskCountByHourArr}}"></div>
-    tasks: {{v.data.taskCountByHourArr}}
   </div>
 </body>
 </html>
