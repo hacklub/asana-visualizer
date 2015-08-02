@@ -5,12 +5,12 @@ var Asana = require('asana');
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var app = express();
-var prod = process.env.NODE_ENV === 'production';
 
+// Environment/config variables
+var prod = process.env.environment === 'production';
+console.log('prod', prod, 'process.env.environment', typeof process.env.environment, process.env.environment, process.env.environment=='production');
 var asanaClientId = process.env.asanaClientId;
 var asanaClientSecret = process.env.asanaClientSecret;
-
-prod ? console.log('asanaClientId', typeof asanaClientId, asanaClientId, 'asanaClientSecret', typeof asanaClientSecret, asanaClientSecret) :'';
 
 // Create an Asana client. Do this per request since it keeps state that
 // shouldn't be shared across requests.
@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use('/', function(req, res, next){
   if(!host){
     host = req.headers.host.split(':')[0];
-    console.log('host', typeof host, host);
+    console.log('I am https://'+host+':'+port+' running in '+process.env.environment+' mode.');
   }
   next();
 })
@@ -55,8 +55,8 @@ app.get('/app', function(req, res) {
   var client = createClient();
   // If token is in the cookie, use it to show info.
   var token = req.cookies.token;
+  console.log('req.cookies.token',req.cookies.token, !prod);
   if(!prod) {
-    console.log('env not production');
     token = 'test_token';
     req.cookies = 'token='+token+';';
   }
@@ -94,5 +94,5 @@ app.get('/oauth_callback', function(req, res) {
 
 // Start the server!
 app.listen(port, function() {
-  console.log("Listening on port " + port);
+  console.log("Server listening on port " + port);
 });
