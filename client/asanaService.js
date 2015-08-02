@@ -71,7 +71,7 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
   }
 
   if(token === 'test_token'){
-    var allCompletedAt = ["2015-08-02T00:22:37.110Z", "2015-08-02T00:22:42.034Z", "2015-08-02T00:22:44.530Z", "2015-08-02T00:22:46.213Z", "2015-08-02T00:22:39.606Z", "2015-08-01T19:17:16.223Z", "2015-08-01T19:17:17.920Z", "2015-08-01T19:17:20.764Z", "2015-08-01T19:17:21.681Z", "2015-08-01T19:17:23.948Z", "2015-08-01T19:17:27.066Z"];
+    var allCompletedAt = [{completed_at:"2015-08-02T00:22:37.110Z"}, {completed_at:"2015-08-02T00:22:42.034Z"}, {completed_at:"2015-08-02T00:22:44.530Z"}, {completed_at:"2015-08-02T00:22:46.213Z"}, {completed_at:"2015-08-02T00:22:39.606Z"}, {completed_at:"2015-08-01T19:17:16.223Z"}, {completed_at:"2015-08-01T19:17:17.920Z"}, {completed_at:"2015-08-01T19:17:20.764Z"}, {completed_at:"2015-08-01T19:17:21.681Z"}, {completed_at:"2015-08-01T19:17:23.948Z"}, {completed_at:"2015-08-01T19:17:27.066Z"}];
     var interval = setInterval(function(){
       if(allCompletedAt.length > 0){
         updateTasksAndDigest(allCompletedAt.pop());
