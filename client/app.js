@@ -1,19 +1,22 @@
 var app = angular.module('Motivatr', []);
 
 app.controller('vizCtrl', vizCtrl);
-vizCtrl.$inject = ['asanaService'];
+vizCtrl.$inject = ['$scope', 'asanaService', 'timeService'];
 
-function vizCtrl(asanaService){
+function vizCtrl($scope, asanaService, timeService){
+  this.chartData = asanaService.tasks;
+  context = this.chartData
+  $scope.$watch('asanaService.tasks', function (newData) {
+    console.log("newData: ", newData);
+  })
 
-  asanaService.tasks;
+  // this.chartData = groupDatesByHour();
 
-  this.chartData = groupDatesByHour();
-
-  function randomHour ( ) {
+  function randomHour () {
     return Math.floor(Math.random()*24);
   }
 
-  function groupDatesByHour(){
+  function groupDatesByHour () {
     return (function(){ var x = []; while(x.length<24){x.push(Math.round(Math.random()*10));} return x; })()
   }
 };
@@ -23,7 +26,7 @@ function dayChart(){
   return {
     restrict:'A'
     ,scope:{ data:'@' }
-    ,template:'<div class="ct-chart"></div>'
+    ,template:'<div class="ct-chart"></div><div>{{data}}</div>'
     ,link:createChartist
   }
 

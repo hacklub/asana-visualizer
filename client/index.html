@@ -5,12 +5,16 @@
   <script src="client/node_modules/angular/angular.js"></script>
   <script src="client/node_modules/asana/dist/asana-min.js"></script>
   <script src="client/node_modules/lodash/index.js"></script>
+  <script src="client/node_modules/chartist/dist/chartist.min.js"></script>
+  <script src="client/node_modules/moment/moment.js"></script>
+  <link rel="stylesheet" href="client/node_modules/chartist/dist/chartist.min.css">
   <script src="client/app.js"></script>
   <script src="client/asanaService.js"></script>
+  <script src="client/timeService.js"></script>
 </head>
 <body>
   <div id="visualizer" ng-controller="vizCtrl as v">
-    <h1>{{v.something}}</h1>
+    <div day-chart data="{{v.chartData}}"></div>
   </div>
 </body>
 </html>

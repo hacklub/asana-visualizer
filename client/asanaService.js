@@ -1,4 +1,4 @@
-app.factory('asanaService', function ($q) {
+app.factory('asanaService', function ($q, timeService) {
 
   // get token from cookie
   var token = document.cookie.split('token=')[1].split(';')[0]
@@ -24,7 +24,7 @@ app.factory('asanaService', function ($q) {
       client.tasks.findAll({
         assignee: params.userId,
         workspace: workspace.id,
-        limit: 1
+        limit: 5
       }).then(function (collection) {
         collection.stream().on('data', function (task) {
           var deferredTask = $q.defer();
@@ -41,13 +41,16 @@ app.factory('asanaService', function ($q) {
     })
 
     $q.all(promises).then(function (allTasksByWorkspace) {
-      console.log("allTasksByWorkspace:", allTasksByWorkspace);
-      var allTasks = _.flatten(allTasksByWorkspace)
-      console.log("allTasks:", allTasks);     
+      var allTasks = _.flatten(allTasksByWorkspace);
       var allCompletedAt = allTasks.map(function(task){
-        return task.completed_at
-      }).filter(function(completed_at){ return !!completed_at })
-      console.log('allCompletedAt',allCompletedAt)
+        return task.completed_at;
+      }).filter(function (completed_at) { 
+        return !!completed_at;
+      });
+      console.log("allCompletedAt: ", allCompletedAt);
+      var temp = timeService.parseTimes(allCompletedAt);
+      console.log("temp: ", temp);
+      TASKLIST.concat(allCompletedAt);
     })
   })
 
