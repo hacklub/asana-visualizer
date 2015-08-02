@@ -1,0 +1,16 @@
+{
+  "name":"motivatr",
+  "scripts":{},
+  "env":{
+    "asanaClientId":{
+      "required":true
+    },
+    "asanaClientSecret":{
+      "required":true
+    },
+    "environment":{
+      "required":true
+    }
+  },
+  "addons":[]
+}
