@@ -1,33 +1,13 @@
-var path = require('path')
-// var express = require('express')
-// var app = express()
-var port = process.env.PORT || 8080
-// var host = process.env.HOST || '0.0.0.0'
-// var server = app.listen(port, function(){
-//   console.log('Server listening at ', host + ':' + port)
-// });
-
-// Middleware
-// var bodyParser = require('body-parser');
-// app.use(bodyParser.json());
-
-// Routes
-// app.get('/', function (request, response) {
-//   // Redirect to Asana Oauth
-//   response.end('query'+JSON.stringify(request.query)+'params'+JSON.stringify(request.params))
-//   console.log('request.params',request.query);
-// })
-
-// app.get('/auth', function (request, response) {
-//   // Receives Asana Oauth Token
-//   response.end('query'+JSON.stringify(request.query)+'params'+JSON.stringify(request.params))
-//   console.log('Do something', request.params)
-// })
-
+var path = require('path');
+var port = process.env.PORT || 8080;
 var Asana = require('asana');
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var app = express();
+
+// Middleware
+// var bodyParser = require('body-parser');
+// app.use(bodyParser.json());
 
 var clientId = '43511055636261';
 var clientSecret = 'f081b14c10d5d1ed524bf7618d870993';
@@ -44,30 +24,35 @@ function createClient() {
 
 // Causes request cookies to be parsed, populating `req.cookies`.
 app.use(cookieParser());
+
+// Client Resources
 app.use('/client/node_modules', express.static(__dirname + '/node_modules'));
 app.use('/client', express.static(__dirname + '/client'));
 
-// Home page - shows user name if authenticated, otherwise seeks authorization.
-app.get('/', function(req, res) {
+// Splash Page Resources
+app.use('/splash/node_modules', express.static(__dirname + '/node_modules'));
+app.use('/splash', express.static(__dirname + '/splash'));
+
+/**
+* Routes
+*/
+
+app.get('/', function (request, response) {
+  response.sendFile(path.join(__dirname, 'splash/index.html'));
+});
+
+
+app.get('/app', function(req, res) {
   var client = createClient();
   // If token is in the cookie, use it to show info.
   var token = req.cookies.token;
   if (token) {
     res.cookie(req.cookies);
     res.sendFile(path.join(__dirname,'client/index.html'))
-    // Here's where we direct the client to use Oauth with the credentials
-    // we have acquired.
-    // client.useOauth({ credentials: token });
-    // client.users.me().then(function(me) {
-    //   res.end('Hello ' + me.name);
-    // }).catch(function(err) {
-    //   res.end('Error fetching user: ' + err);
-    // });
   } else {
     // Otherwise redirect to authorization.
     res.redirect(client.app.asanaAuthorizeUrl());
   }
-
 });
 
 // Authorization callback - redirected to from Asana.
@@ -91,15 +76,12 @@ app.get('/oauth_callback', function(req, res) {
     // Authorization could have failed. Show an error.
     res.end('Error getting authorization: ' + req.param('error'));
   }
-
 });
 
-// Run the server!
-var server = app.listen(port, function() {
+// Start the server!
+app.listen(port, function() {
   console.log("Listening on port " + port);
 });
-
-
 
 // =======================================================
 // VISUALIZER BLOCK
