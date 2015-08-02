@@ -1,6 +1,8 @@
 app.factory('asanaService', function ($q, timeService, $rootScope) {
   var self = this;
-  this.chart = {
+  self.status = 'uninitialized';
+  self.tasks = [];
+  self.chart = {
     options: {
       chart: {
           type: 'discreteBarChart',
@@ -30,10 +32,6 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
     data: [{
       key: "Tasks Per Hour",
       values: [
-        { "label":"midnight", "value":0 },
-        { "label":"1am", "value":0 },
-        { "label":"2am", "value":0 },
-        { "label":"3am", "value":0 },
         { "label":"4am", "value":0 },
         { "label":"5am", "value":0 },
         { "label":"6am", "value":0 },
@@ -53,38 +51,50 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
         { "label":"8pm", "value":0 },
         { "label":"9pm", "value":0 },
         { "label":"10pm", "value":0 },
-        { "label":"11pm", "value":0 }
+        { "label":"11pm", "value":0 },
+        { "label":"midnight", "value":0 },
+        { "label":"1am", "value":0 },
+        { "label":"2am", "value":0 },
+        { "label":"3am", "value":0 }
       ]
     }]
   };
+
+  function convertTaskToChartData(taskDetails){
+    if(taskDetails && taskDetails.completed_at){
+      var localTime = new Date(taskDetails.completed_at);
+      console.log('adding',taskDetails,'to chart.data');
+      var hour = localTime.getHours();
+      var chartIndex = (hour+20)%24 // 4am is the first label
+      var count = self.chart.data[0].values[chartIndex].value + 1;
+      self.chart.data[0].values[chartIndex].value = count;
+      $rootScope.$digest();
+    }
+  }
 
   // get token from cookie
   var token = document.cookie.split('token=')[1].split(';')[0]
   console.log('token:',token);
 
   function updateTasksAndDigest(taskDetails){
-    console.log('adding',taskDetails,'to chart.data');
-    var hour = Number(taskDetails.completed_at.split('T')[1].split(':')[0]);
-    var count = self.chart.data[0].values[hour].value + 1;
-    self.chart.data[0].values[hour].value = count;
-    $rootScope.$digest();
   }
 
   if(token === 'test_token'){
+    self.status = 'faking';
     var allCompletedAt = [{completed_at:"2015-08-02T00:22:37.110Z"}, {completed_at:"2015-08-02T00:22:42.034Z"}, {completed_at:"2015-08-02T00:22:44.530Z"}, {completed_at:"2015-08-02T00:22:46.213Z"}, {completed_at:"2015-08-02T00:22:39.606Z"}, {completed_at:"2015-08-01T19:17:16.223Z"}, {completed_at:"2015-08-01T19:17:17.920Z"}, {completed_at:"2015-08-01T19:17:20.764Z"}, {completed_at:"2015-08-01T19:17:21.681Z"}, {completed_at:"2015-08-01T19:17:23.948Z"}, {completed_at:"2015-08-01T19:17:27.066Z"}];
     var interval = setInterval(function(){
       if(allCompletedAt.length > 0){
-        updateTasksAndDigest(allCompletedAt.pop());
+        convertTaskToChartData(allCompletedAt.pop());
       } else {
         clearInterval(interval);
       }
     }, 500);
   } else {
+    self.status = 'loading';
     var client = Asana.Client.create()
     client.useOauth({ credentials: token })
 
     // TODO take all workspaces, filter by completed by user, map timestamp
-
     client.users.me().then(function (user) {
       var taskParams = {}
       taskParams.workspaces = user.workspaces
@@ -99,16 +109,13 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
         client.tasks.findAll({
           assignee: params.userId,
           workspace: workspace.id,
-          limit: 5
+          limit: 3
         }).then(function (collection) {
           collection.stream().on('data', function (task) {
-            var deferredTask = $q.defer();
-            client.tasks.findById(task.id)
-              .then(function (taskDetails) {
-                deferredTask.resolve(taskDetails)
-                workspaceTasks.push(taskDetails)
-                updateTasksAndDigest(taskDetails);
-              })
+            client.tasks.findById(task.id).then(function (taskDetails) {
+                self.tasks.push(taskDetails);
+                convertTaskToChartData(taskDetails);
+            })
           }).on('end', function () {
             deferredCollection.resolve(workspaceTasks)
           })
@@ -123,6 +130,7 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
         }).filter(function (completed_at) {
           return !!completed_at;
         });
+        self.status = 'done';
         console.log("allCompletedAt: ", allCompletedAt);
       })
     })
