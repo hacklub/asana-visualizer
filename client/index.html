@@ -25,6 +25,7 @@
 </head>
 <body>
   <div id="visualizer" ng-controller="vizCtrl as v">
+    <span id="stream-status">{{v.asana.status}}</span>
     <nvd3 options="v.chart.options" data="v.chart.data" config="{ refreshDataOnly:true }"></nvd3>
   </div>
 </body>
