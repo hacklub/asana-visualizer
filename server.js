@@ -17,7 +17,7 @@ function createClient() {
   return Asana.Client.create({
     clientId: asanaClientId,
     clientSecret: asanaClientSecret,
-    redirectUri: 'https://' + host + ':' + port + '/oauth_callback'
+    redirectUri: 'https://' + host + '/oauth_callback'
   });
 }
 
