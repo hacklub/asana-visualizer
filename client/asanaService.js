@@ -1,8 +1,33 @@
 app.factory('asanaService', function ($q, timeService, $rootScope) {
   var self = this;
-  this.data = {
-    tasks: [],
-    taskCountByHour: [{
+  this.chart = {
+    options: {
+      chart: {
+          type: 'discreteBarChart',
+          height: 450,
+          margin : {
+              top: 20,
+              right: 20,
+              bottom: 60,
+              left: 55
+          },
+          x: function(d){ return d.label; },
+          y: function(d){ return d.value; },
+          showValues: true,
+          valueFormat: function(d){
+              return d3.format(',.4f')(d);
+          },
+          transitionDuration: 500,
+          xAxis: {
+              axisLabel: 'X Axis'
+          },
+          yAxis: {
+              axisLabel: 'Y Axis',
+              axisLabelDistance: 30
+          }
+      }
+    },
+    data: [{
       key: "Tasks Per Hour",
       values: [
         { "label":"midnight", "value":0 },
@@ -38,10 +63,10 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
   console.log('token:',token);
 
   function updateTasksAndDigest(taskDetails){
-    console.log('adding',taskDetails,'to',self.data.tasks);
+    console.log('adding',taskDetails,'to chart.data');
     var hour = Number(taskDetails.split('T')[1].split(':')[0]);
-    var count = self.data.taskCountByHour[0].values[hour].value + 1;
-    self.data.taskCountByHour[0].values[hour].value = count;
+    var count = self.chart.data[0].values[hour].value + 1;
+    self.chart.data[0].values[hour].value = count;
     $rootScope.$digest();
   }
 
@@ -68,7 +93,6 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
       console.log("user:", user);
       return taskParams
     }).then(function (params) {
-
       var promises = _.map(params.workspaces, function (workspace) {
         var workspaceTasks = []
         var deferredCollection = $q.defer()
@@ -100,12 +124,9 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
           return !!completed_at;
         });
         console.log("allCompletedAt: ", allCompletedAt);
-        var temp = timeService.parseTimes(allCompletedAt);
-        console.log("temp: ", temp);
-        response.tasks.concat(allCompletedAt);
       })
     })
   }
 
-  return this.data;
+  return this;
 })
