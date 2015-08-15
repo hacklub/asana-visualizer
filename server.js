@@ -6,6 +6,12 @@ var express = require('express');
 var cookieParser = require('cookie-parser');
 var app = express();
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+var Mailgun = require('mailgun').Mailgun;
+var mailgun = new Mailgun('api-key');
+
 // Environment/config variables
 var prod = process.env.environment === 'production';
 var asanaClientId = process.env.asanaClientId;
@@ -50,6 +56,13 @@ app.get('/', function (request, response) {
   response.sendFile(path.join(__dirname, 'splash/index.html'));
 });
 
+app.post('/email', function(req, res){
+  console.log('email submitted:',req.body.email);
+  mailgun.sendText('hacklub@mail.com', 'hacklub@mail.com', 'motivatr email submitted', req.body.email, function (statusCode){
+    console.log('mailgun cb args', arguments);
+    res.sendStatus(statusCode || 200);
+  });
+});
 
 app.get('/app', function(req, res) {
   var client = createClient();
