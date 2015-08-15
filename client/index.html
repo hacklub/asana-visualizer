@@ -37,10 +37,12 @@
       <nvd3 options="v.chart.options" data="v.chart.data" config="{ refreshDataOnly:true }"></nvd3>
     </div>
   </section>
-  <footer ng-controller="captureEmailController as email">
-    <form ng-submit="email.submit(emailAddress)">
-      <input type="email" ng-model="emailAddress" placeholder="Email">
-      <input type="submit" value="{{email.submitButtonText}}" />
+  <br />
+  <footer ng-controller="captureEmailController as email" class="container">
+    <form ng-submit="email.submit(emailAddress)" class="form-inline col-centered">
+      <label class="col-centered cta">For more productivity insights<i class="glyphicon glyphicon-chevron-right"></i></label>
+      <input type="email" ng-model="emailAddress" placeholder="Email" class="form-control" />
+      <input type="submit" value="{{email.submitButtonText}}" class="btn btn-mid submit-default"/>
     </form>
   </footer>
 </body>

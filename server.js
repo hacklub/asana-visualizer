@@ -73,7 +73,7 @@ app.use('/splash', express.static(__dirname + '/splash'));
 ////////////
 
 app.get('/', function (req, res) {
-  response.sendFile(path.join(__dirname, 'splash/index.html'));
+  res.sendFile(path.join(__dirname, 'splash/index.html'));
 });
 
 app.post('/email', function (req, res) {

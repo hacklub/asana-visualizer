@@ -67,3 +67,30 @@ body {
   opacity: 1.0;
 
 }
+
+/*
+ * Email Submit
+ */
+
+ .cta {
+  color: white;
+  font-family: 'Helvetica';
+  font-weight: bold;
+  font-size: 1.5em;
+  padding-top: .25em;
+ }
+
+.submit-default,
+.submit-default:hover,
+.submit-default:focus {
+  margin-top: -.5em;
+  font-weight: bold;
+  color: #333;
+  text-shadow: none; /* Prevent inheritence from `body` */
+  background-color: #fff;
+  border: 1px solid #fff;
+}
+
+.form-control {
+  margin-top: -.5em;
+}
