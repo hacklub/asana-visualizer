@@ -25,10 +25,17 @@
   <link rel="stylesheet" href="client/app.css">
 </head>
 <body>
-  <div id="visualizer" ng-controller="vizCtrl as v">
-    <span id="status">Status: {{v.asana.status}}</span>
-    <span id="most-productive-hour">Most productive hour: {{v.findMostProductiveHour(v.chart.data)}}</span>
-    <nvd3 options="v.chart.options" data="v.chart.data" config="{ refreshDataOnly:true }"></nvd3>
-  </div>
+  <section id="visualizer" ng-controller="vizCtrl as v" class="container">
+    <div class=" row page-header">
+      <div class="col-md-6 col-centered">
+          <!-- Hide the thing till data collection is done then notify the user -->
+          <!-- <span id="status" class="status">Status: {{v.asana.status}}</span> -->
+          <span id="most-productive-hour" class="most-productive">Your Most Productive Hour: {{ v.findMostProductiveHour(v.chart.data).label }}</span>
+      </div>
+    </div>
+    <div class="row chart">
+      <nvd3 options="v.chart.options" data="v.chart.data" config="{ refreshDataOnly:true }"></nvd3>
+    </div>
+  </section>
 </body>
 </html>
