@@ -35,6 +35,7 @@ app.use('/', function(req, res, next){
 
 // Client Resources
 app.use('/client/node_modules', express.static(__dirname + '/node_modules'));
+app.use('/client/bower_components', express.static(__dirname + '/bower_components'));
 app.use('/client', express.static(__dirname + '/client'));
 
 // Splash Page Resources
