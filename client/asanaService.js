@@ -38,7 +38,7 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
         { "label":"9am", "value":0 },
         { "label":"10am", "value":0 },
         { "label":"11am", "value":0 },
-        { "label":"noon", "value":0 },
+        { "label":"Noon", "value":0 },
         { "label":"1pm", "value":0 },
         { "label":"2pm", "value":0 },
         { "label":"3pm", "value":0 },
@@ -50,7 +50,7 @@ app.factory('asanaService', function ($q, timeService, $rootScope) {
         { "label":"9pm", "value":0 },
         { "label":"10pm", "value":0 },
         { "label":"11pm", "value":0 },
-        { "label":"midnight", "value":0 },
+        { "label":"Midnight", "value":0 },
         { "label":"1am", "value":0 },
         { "label":"2am", "value":0 },
         { "label":"3am", "value":0 }
