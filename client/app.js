@@ -34,9 +34,11 @@ function captureEmailController($http){
     self.submitButtonText = 'Submitting...';
     $http.post('http://localhost:8080/email', {email:email}).then(onSuccess, onError);
     function onSuccess(response){
+      console.log('success args',arguments);
       self.submitButtonText = 'Submitted!';
     };
     function onError(response){
+      console.log('error args',arguments);
       self.submitButtonText = 'Error';
     };
   }

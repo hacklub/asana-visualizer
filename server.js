@@ -10,7 +10,8 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 var Mailgun = require('mailgun').Mailgun;
-var mailgun = new Mailgun('api-key');
+var mailgunAPIKey = process.env.mailgunAPIKey;
+var mailgun = new Mailgun(mailgunAPIKey);
 
 // Environment/config variables
 var prod = process.env.environment === 'production';
@@ -58,9 +59,11 @@ app.get('/', function (request, response) {
 
 app.post('/email', function(req, res){
   console.log('email submitted:',req.body.email);
-  mailgun.sendText('hacklub@mail.com', 'hacklub@mail.com', 'motivatr email submitted', req.body.email, function (statusCode){
-    console.log('mailgun cb args', arguments);
-    res.sendStatus(statusCode || 200);
+
+  mailgun.sendText('hacklub@mail.com', 'hacklub@mail.com', 'motivatr email submitted', req.body.email, function (error){
+    var error = error || {};
+    console.log('mailgun response:', error.name ? error.name+':'+error.message : 'success');
+    res.sendStatus(error.message || 200);
   });
 });
 
