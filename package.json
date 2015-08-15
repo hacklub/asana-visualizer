@@ -11,6 +11,9 @@
     "url": "https://github.com/mLuby/motivatr.git"
   },
   "author": "Mike Luby <Michael@mLuby.com> (https://github.com/mLuby)",
+  "contributors": [
+    "Ryn830 <ryn830@gmail.com> (https://github.com/Ryn830)"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mLuby/motivatr/issues"
@@ -25,7 +28,6 @@
     "express": "^4.13.2",
     "jquery": "^2.1.4",
     "lodash": "^3.10.0",
-    "moment": "^2.10.6",
-    "nvd3": "^1.8.1"
+    "moment": "^2.10.6"
   }
 }
