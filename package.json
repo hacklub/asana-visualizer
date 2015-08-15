@@ -4,7 +4,7 @@
   "description": "Tells you when to do what based on when you’re most productive",
   "main": "app.js",
   "scripts": {
-    "start": "bash start.sh",
+    "local": "bash start.sh",
     "postinstall": "./node_modules/bower/bin/bower install"
   },
   "repository": {
