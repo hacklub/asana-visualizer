@@ -1,0 +1,22 @@
+{
+  "name": "motivatr",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Hacklub/motivatr",
+  "authors": [
+    "Mike Luby <Michael@mLuby.com>",
+    "Ryn830 <ryn830@gmail.com>"
+  ],
+  "description": "Use Asana to find out when you're most productive",
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-nvd3": "~0.1.1"
+  }
+}
