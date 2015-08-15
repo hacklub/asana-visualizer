@@ -23,3 +23,21 @@ function vizCtrl($scope, asanaService, timeService){
     return mostProductiveHour;
   }
 };
+
+app.controller('captureEmailController', captureEmailController)
+captureEmailController.$inject = ['$http'];
+function captureEmailController($http){
+  var self = this;
+  self.submitButtonText = 'Submit';
+  self.submit = function(email){
+    console.log('submitted',email);
+    self.submitButtonText = 'Submitting...';
+    $http.post('http://localhost:8080/email', {email:email}).then(onSuccess, onError);
+    function onSuccess(response){
+      self.submitButtonText = 'Submitted!';
+    };
+    function onError(response){
+      self.submitButtonText = 'Error';
+    };
+  }
+}

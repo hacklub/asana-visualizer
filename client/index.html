@@ -37,5 +37,11 @@
       <nvd3 options="v.chart.options" data="v.chart.data" config="{ refreshDataOnly:true }"></nvd3>
     </div>
   </section>
+  <footer ng-controller="captureEmailController as email">
+    <form ng-submit="email.submit(emailAddress)">
+      <input type="email" ng-model="emailAddress" placeholder="Email">
+      <input type="submit" value="{{email.submitButtonText}}" />
+    </form>
+  </footer>
 </body>
 </html>
