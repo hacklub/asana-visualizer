@@ -9,9 +9,28 @@ var app = express();
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
 var Mailgun = require('mailgun').Mailgun;
 var mailgunAPIKey = process.env.mailgunAPIKey;
 var mailgun = new Mailgun(mailgunAPIKey);
+function sendWithMailgun(email, callback) {
+  mailgun.sendText(email.from, email.to, email.subject+' :mailgun', email.body, function (error) {
+    callback(error, 200);
+  });
+}
+
+var sendgrid  = require('sendgrid')(process.env.sendgridAPIKey);
+function sendWithSendgrid(email, callback) {
+  sendgrid.send({
+    to:       email.to,
+    from:     email.from,
+    subject:  email.subject+' :sendgrid',
+    text:     email.body
+  }, function(error, success){
+    var successStatusCode = success.message==='success' ? 200 : 0;
+    callback(error, successStatusCode);
+  });
+}
 
 // Environment/config variables
 var prod = process.env.environment === 'production';
@@ -32,8 +51,8 @@ function createClient() {
 app.use(cookieParser());
 
 // Fill in host on first incoming request
-app.use('/', function(req, res, next){
-  if(!host){
+app.use('/', function (req, res, next) {
+  if(!host) {
     host = req.headers.host.split(':')[0];
     console.log('I am https://'+host+':'+port+' running in '+process.env.environment+' mode.');
   }
@@ -53,21 +72,33 @@ app.use('/splash', express.static(__dirname + '/splash'));
 // Routes //
 ////////////
 
-app.get('/', function (request, response) {
+app.get('/', function (req, res) {
   response.sendFile(path.join(__dirname, 'splash/index.html'));
 });
 
-app.post('/email', function(req, res){
+app.post('/email', function (req, res) {
   console.log('email submitted:',req.body.email);
+  var email = {
+    to:'hacklub@mail.com',
+    from:'hacklub@mail.com',
+    subject:'motivatr email submitted',
+    body:req.body.email
+  };
+  var callback = function (errorStatusCode, successStatusCode) {
+    if(errorStatusCode) {
+      console.log('mail error', errorStatusCode);
+      res.sendStatus(errorStatusCode)
+    } else {
+      console.log('mail success', successStatusCode);
+      res.sendStatus(successStatusCode)
+    }
+  }
 
-  mailgun.sendText('hacklub@mail.com', 'hacklub@mail.com', 'motivatr email submitted', req.body.email, function (error){
-    var error = error || {};
-    console.log('mailgun response:', error.name ? error.name+':'+error.message : 'success');
-    res.sendStatus(error.message || 200);
-  });
+  // sendWithSendgrid(email, callback)
+  sendWithMailgun(email, callback)
 });
 
-app.get('/app', function(req, res) {
+app.get('/app', function (req, res) {
   var client = createClient();
   // If token is in the cookie, use it to show info.
   var token = req.cookies.token;
@@ -85,13 +116,13 @@ app.get('/app', function(req, res) {
 });
 
 // Authorization callback - redirected to from Asana.
-app.get('/oauth_callback', function(req, res) {
+app.get('/oauth_callback', function (req, res) {
   var code = req.param('code');
   if (code) {
     // If we got a code back, then authorization succeeded.
     // Get token. Store it in the cookie and redirect home.
     var client = createClient();
-    client.app.accessTokenFromCode(code).then(function(credentials) {
+    client.app.accessTokenFromCode(code).then(function (credentials) {
       // The credentials contain the refresh token as well. If you use it, keep
       // it safe on the server! Here we just use the access token, and store it
       // in the cookie for an hour.
@@ -108,6 +139,6 @@ app.get('/oauth_callback', function(req, res) {
 });
 
 // Start the server!
-app.listen(port, function() {
+app.listen(port, function () {
   console.log("Server listening on port " + port);
 });
