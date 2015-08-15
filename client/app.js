@@ -12,7 +12,7 @@ function vizCtrl($scope, asanaService, timeService){
   }, function (status) {
     if (status === 'done') {
       self.blink = 'blinkOff';
-    } 
+    }
   });
 
   this.findMostProductiveHour = function(chartData){
@@ -32,7 +32,7 @@ function captureEmailController($http){
   self.submit = function(email){
     console.log('submitted',email);
     self.submitButtonText = 'Submitting...';
-    $http.post('http://localhost:8080/email', {email:email}).then(onSuccess, onError);
+    $http.post('https://motivatr-app.herokuapp.com/email', {email:email}).then(onSuccess, onError);
     function onSuccess(response){
       console.log('success args',arguments);
       self.submitButtonText = 'Submitted!';
