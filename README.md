@@ -1,2 +1,2 @@
-# motivatr
-Tells you when to do what based on when you’re most productive
+# Did you find us? 
+Email hacklub@mail.com to claim your prize!
